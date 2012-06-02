@@ -1,5 +1,19 @@
 #!/usr/bin/env ruby
 
+# Copyright (C) 2012 Ness Computing, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # Launcher script for ActiveMQ
 
 =begin
@@ -15,7 +29,7 @@ status
 Commands return
 
 0 - Stopped
-1 - Running 
+1 - Running
 2 - Unknown
 =end
 
@@ -99,7 +113,7 @@ def load_launcher_data launcher_data_file="bin/LAUNCHER_TYPE"
 end
 
 #
-# Executes the actual child process. 
+# Executes the actual child process.
 # Reopens stdout and stderr to the general
 # log file.
 def execute
@@ -107,41 +121,49 @@ def execute
   STDOUT.sync=true
 
   STDERR.reopen STDOUT
-  STDERR.sync=false
+  STDERR.sync=true
 
 
   classpath=Dir.entries(File.join(@scripts.base, 'lib')).select {|dir| dir =~ /\.jar$/ }.collect { |dir| "lib/#{dir}" }.join(":")
   jvm_opts=@scripts.get_jvm_opts.join(' ')
   galaxy=@scripts.get_java_galaxy_env.join(' ')
 
-  activemq_home=File.join(@scripts.base, 'data')
+  if @scripts.respond_to? "persistent_dir" && ! @scripts.persistent_dir.nil?
+    activemq_home=File.join(@scripts.persistent_dir, 'activemq')
+  else
+    activemq_home=File.join(@scripts.base, 'data')
+  end
   FileUtils.mkdir_p activemq_home
 
-  activemq_opts = [
-                   "-Dness.config.location=file:#{@scripts.config_location}",
-                   "-Dness.config=#{@scripts.config_path}",
-                   "-Dactivemq.home=#{activemq_home}", 
-                   "-Dactivemq.base=#{@scripts.base}",
-                   "-Dorg.apache.activemq.UseDedicatedTaskRunner=true", 
-                   "-Djava.util.logging.config.file=logging.properties" 
-                 ]
+  config_opts = [
+                 "-Dness.config.location=file:#{@scripts.config_location}",
+                 "-Dness.config=#{@scripts.config_path}",
+                 "-Dactivemq.home=#{activemq_home}",
+                 "-Dactivemq.base=#{@scripts.base}",
+                 "-Dorg.apache.activemq.UseDedicatedTaskRunner=true",
+                 "-Djava.util.logging.config.file=logging.properties"
+                ]
 
   if File.exists?("#{@scripts.base}/log4j.xml")
-    activemq_opts << "-Dlog4j.configuration=file:#{@scripts.base}/log4j.xml"
+    config_opts << "-Dlog4j.configuration=file:#{@scripts.base}/log4j.xml"
   end
 
-  activemq_opts = activemq_opts.join(' ')
+  if @scripts.respond_to? "tmp_dir" && ! @scripts.tmp_dir.nil?
+    config_opts << "-Djava.io.tmpdir=#{@scripts.tmp_dir}"
+  end
+
+  config = config_opts.join(" ")
 
   puts "=" * 72
   puts "=== config:    #{@scripts.config_path}"
   puts "=== jvm:       #{jvm_opts}"
   puts "=== galaxy:    #{galaxy}"
-  puts "=== activemq:  #{activemq_opts}"
+  puts "=== activemq:  #{config}"
   puts "=== classpath: #{classpath}"
   puts "=" * 72
 
   Dir.chdir @scripts.base
-  command="java #{jvm_opts} #{activemq_opts} #{galaxy} -classpath #{classpath} org.apache.activemq.console.Main start xbean:file:#{@scripts.base}/conf/activemq.xml"
+  command="java #{jvm_opts} #{config} #{galaxy} -classpath #{classpath} org.apache.activemq.console.Main start xbean:file:#{@scripts.base}/conf/activemq.xml"
   exec command
 end
 
@@ -156,7 +178,7 @@ def start
 
   launcher_data = load_launcher_data
 
-  pid = fork { execute  }
+  pid = fork { execute }
 
   Process.detach pid
   save_pid pid
