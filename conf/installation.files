@@ -1,0 +1,8 @@
+#
+# --> : copy only the last (most detailed) file with template replacement
+# -!> : copy the file without any replacement (for binaries)
+# @<octal string mode> at the end sets the chmod for the file. If nothing is given, 666 is assumed.
+# 
+activemq.xml            --> conf/activemq.xml
+jetty.xml               --> conf/jetty.xml
+webconsole-embedded.xml --> webapps/admin/WEB-INF/webconsole-embedded.xml
