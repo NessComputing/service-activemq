@@ -128,17 +128,18 @@ def execute
   jvm_opts=@scripts.get_jvm_opts.join(' ')
   galaxy=@scripts.get_java_galaxy_env.join(' ')
 
-  if @scripts.respond_to? "persistent_dir" && ! @scripts.persistent_dir.nil?
-    activemq_home=File.join(@scripts.persistent_dir, 'activemq')
+  if @scripts.respond_to?("persistent_dir") && ! @scripts.persistent_dir.nil?
+    activemq_data=File.join(@scripts.persistent_dir, 'activemq')
   else
-    activemq_home=File.join(@scripts.base, 'data')
+    activemq_data=File.join(@scripts.base, 'data')
   end
-  FileUtils.mkdir_p activemq_home
+  FileUtils.mkdir_p activemq_data
 
   config_opts = [
                  "-Dness.config.location=file:#{@scripts.config_location}",
                  "-Dness.config=#{@scripts.config_path}",
-                 "-Dactivemq.home=#{activemq_home}",
+                 "-Dactivemq.home=#{activemq_data}",
+                 "-Dactivemq.data=#{activemq_data}",
                  "-Dactivemq.base=#{@scripts.base}",
                  "-Dorg.apache.activemq.UseDedicatedTaskRunner=true",
                  "-Djava.util.logging.config.file=logging.properties"
@@ -148,7 +149,7 @@ def execute
     config_opts << "-Dlog4j.configuration=file:#{@scripts.base}/log4j.xml"
   end
 
-  if @scripts.respond_to? "tmp_dir" && ! @scripts.tmp_dir.nil?
+  if @scripts.respond_to?("tmp_dir") && ! @scripts.tmp_dir.nil?
     config_opts << "-Djava.io.tmpdir=#{@scripts.tmp_dir}"
   end
 
