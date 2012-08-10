@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.nesscomputing</groupId>
     <artifactId>ness-oss-parent</artifactId>
-    <version>16</version>
+    <version>17</version>
   </parent>
 
   <groupId>com.nesscomputing.service.activemq</groupId>
@@ -281,4 +281,64 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.ning.maven.plugins</groupId>
+        <artifactId>maven-duplicate-finder-plugin</artifactId>
+          <configuration>
+            <exceptions combine.children="append">
+              <exception>
+                <conflictingDependencies>
+                  <dependency>
+                    <groupId>org.apache.camel</groupId>
+                    <artifactId>camel-core</artifactId>
+                  </dependency>
+                  <dependency>
+                    <groupId>org.apache.camel</groupId>
+                    <artifactId>camel-spring</artifactId>
+                  </dependency>
+                </conflictingDependencies>
+                <classes>
+                  <class>org.apache.camel.component.test.TestComponent</class>
+                  <class>org.apache.camel.component.test.TestEndpoint</class>
+                  <class>org.apache.camel.component.validator.DefaultLSResourceResolver</class>
+                  <class>org.apache.camel.component.validator.ValidatorComponent</class>
+                  <class>org.apache.camel.component.xslt.XsltComponent</class>
+                  <class>org.apache.camel.component.xslt.XsltConstants</class>
+                  <class>org.apache.camel.component.xslt.XsltEndpoint</class>
+                </classes>
+              </exception>
+              <exception>
+                <conflictingDependencies>
+                  <dependency>
+                    <groupId>xmlpull</groupId>
+                    <artifactId>xmlpull</artifactId>
+                  </dependency>
+                  <dependency>
+                    <groupId>xpp3</groupId>
+                    <artifactId>xpp3</artifactId>
+                  </dependency>
+                </conflictingDependencies>
+                <classes>
+                  <class>org.xmlpull.v1.XmlPullParser</class>
+                  <class>org.xmlpull.v1.XmlPullParserException</class>
+                  <class>org.xmlpull.v1.XmlPullParserFactory</class>
+                  <class>org.xmlpull.v1.XmlSerializer</class>
+                </classes>
+              </exception>
+            </exceptions>
+            <ignoredResources combine.children="append">
+              <ignoredResource>META-INF/eclipse\.inf</ignoredResource>
+              <ignoredResource>META-INF/ECLIPSEF\.RSA</ignoredResource>
+              <ignoredResource>META-INF/ECLIPSEF\.SF</ignoredResource>
+              <ignoredResource>about_files/LICENSE_ASL20\.txt</ignoredResource>
+              <ignoredResource>about_files/LICENSE_CDDL\.txt</ignoredResource>
+              <ignoredResource>plugin\.properties</ignoredResource>
+            </ignoredResources>
+          </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
