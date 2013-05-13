@@ -9,7 +9,7 @@
 
   <groupId>com.nesscomputing.service.activemq</groupId>
   <artifactId>activemq-server</artifactId>
-  <version>5.8.0-NESS-2-SNAPSHOT</version>
+  <version>5.8.0-NESS-2</version>
   <name>activemq</name>
   <packaging>jar</packaging>
 
@@ -17,7 +17,7 @@
     <connection>scm:git:git://github.com/NessComputing/service-activemq.git</connection>
     <developerConnection>scm:git:git@github.com:NessComputing/service-activemq.git</developerConnection>
     <url>http://github.com/NessComputing/service-activemq</url>
-    <tag>HEAD</tag>
+    <tag>activemq-server-5.8.0-NESS-2</tag>
   </scm>
 
   <properties>
