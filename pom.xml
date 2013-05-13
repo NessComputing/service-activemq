@@ -23,10 +23,12 @@
   <properties>
     <galaxy.packaging>activemq</galaxy.packaging>
     <galaxy.launcher>activemq</galaxy.launcher>
+    <galaxy.scripts.version>1.2.0</galaxy.scripts.version>
     <galaxy.mainclass>UNSET</galaxy.mainclass> <!-- custom launcher -->
     <dep.activemq.version>5.8.0</dep.activemq.version>
     <dep.jetty.version>8.1.5.v20120716</dep.jetty.version>
     <dep.jackson.version>1.9.9</dep.jackson.version>
+    <dep.jolokia.version>1.1.1</dep.jolokia.version>
   </properties>
 
   <dependencies>
@@ -192,6 +194,21 @@
       <version>1.6.1</version>
     </dependency>
 
+    <!-- This is unpacked via a custom directive in the activemq-assembly in components-ness-galaxy. -->
+    <dependency>
+      <groupId>org.jolokia</groupId>
+      <artifactId>jolokia-war</artifactId>
+      <version>${dep.jolokia.version}</version>
+      <type>war</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jolokia</groupId>
+      <artifactId>jolokia-jsr160</artifactId>
+      <version>${dep.jolokia.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-jsp</artifactId>
@@ -266,6 +283,12 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.jolokia</groupId>
+        <artifactId>jolokia-core</artifactId>
+        <version>${dep.jolokia.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>jul-to-slf4j</artifactId>
