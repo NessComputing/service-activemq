@@ -25,7 +25,7 @@
     <galaxy.launcher>activemq</galaxy.launcher>
     <galaxy.scripts.version>1.2.0</galaxy.scripts.version>
     <galaxy.mainclass>UNSET</galaxy.mainclass> <!-- custom launcher -->
-    <dep.activemq.version>5.8.0</dep.activemq.version>
+    <dep.activemq.version>5.15.12</dep.activemq.version>
     <dep.jetty.version>8.1.5.v20120716</dep.jetty.version>
     <dep.jackson.version>1.9.9</dep.jackson.version>
     <dep.jolokia.version>1.1.1</dep.jolokia.version>
