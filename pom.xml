@@ -28,7 +28,7 @@
     <dep.activemq.version>5.8.0</dep.activemq.version>
     <dep.jetty.version>8.1.5.v20120716</dep.jetty.version>
     <dep.jackson.version>1.9.9</dep.jackson.version>
-    <dep.jolokia.version>1.1.1</dep.jolokia.version>
+    <dep.jolokia.version>1.6.1</dep.jolokia.version>
   </properties>
 
   <dependencies>
